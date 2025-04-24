@@ -34,6 +34,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.todolistnavigation.data.TaskRepository
 import com.example.todolistnavigation.features.AddItem
 import com.example.todolistnavigation.features.InformationItem
 import com.example.todolistnavigation.features.TodoUI
@@ -45,26 +46,30 @@ import com.example.todolistnavigation.ui.theme.mainColor
 class UserViewModelFactory(val application: Application) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return TodoViewModel(application) as T
+        return TodoViewModel() as T
     }
 }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        TaskRepository.init(applicationContext)
+
         enableEdgeToEdge()
         setContent {
-            val owner = LocalViewModelStoreOwner.current
-
-            owner?.let {
-                val viewModel: TodoViewModel = viewModel(
-                    it,
-                    "UserViewModel",
-                    UserViewModelFactory(LocalContext.current.applicationContext as Application)
-                )
-                Main(viewModel)
-            }
+            Main()
         }
+//            val owner = LocalViewModelStoreOwner.current
+//
+//            owner?.let {
+//                val viewModel: TodoViewModel = viewModel(
+//                    it,
+//                    "UserViewModel",
+//                    UserViewModelFactory(LocalContext.current.applicationContext as Application)
+//                )
+//                Main(viewModel)
+//            }
+//        }
     }
 }
 

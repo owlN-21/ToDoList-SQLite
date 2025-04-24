@@ -1,5 +1,6 @@
 package com.example.todolistnavigation.data
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +29,22 @@ class TaskRepository(private val itemDao: TaskDao) {
     fun toggleTaskChecked(taskId: Int){
         coroutineScope.launch(Dispatchers.IO) {
             itemDao.toggleChecked(taskId)
+        }
+    }
+
+    companion object {
+        private var instance: TaskRepository? = null
+
+        fun init(context: Context) {
+            if (instance == null) {
+                val taskDb = TaskDatabase.getInstance(context)
+                val taskDao = taskDb.userDao()
+                instance = TaskRepository(taskDao)
+            }
+        }
+
+        fun getInstance (): TaskRepository {
+            return instance!!
         }
     }
 }

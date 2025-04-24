@@ -5,13 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.todolistnavigation.data.Task
 import com.example.todolistnavigation.data.TaskDatabase
 import com.example.todolistnavigation.data.TaskRepository
 
-class TodoViewModel(application: Application) :ViewModel(){
+class TodoViewModel :ViewModel(){
 
     val taskList: LiveData<List<Task>>
     val checkedCount: LiveData<List<Boolean>>
@@ -20,9 +21,7 @@ class TodoViewModel(application: Application) :ViewModel(){
     var checkedState by mutableStateOf(false)
 
     init {
-        val taskDb = TaskDatabase.getInstance(application)
-        val taskDao = taskDb.userDao()
-        repository = TaskRepository(taskDao)
+        repository = TaskRepository.getInstance()
         taskList = repository.taskList
         checkedCount = repository.checkCount
     }
